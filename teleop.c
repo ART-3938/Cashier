@@ -44,9 +44,9 @@ void strafe(){
 
 void InitializeRobot()
 {
-	//FTC purposes
+	disableDiagnosticsDisplay();
 }
-\
+
 task drive()
 {
 	//strafe();
@@ -55,13 +55,13 @@ task drive()
 
 task drawScreen()
 {
-	//set up canvas
-	//eraseDisplay();
-	//nxtDrawRect(0,0,99,63);
-	//draw joystick vals
-	//nxtDisplayStringAt(2, 2, "X1: " joystick.joy1_x1);
-	//draw motor speeds
-
+	eraseDisplay();
+	nxtDisplayCenteredTextLine(0, "ART-3938");
+	nxtDisplayString(0, "MotorFL: %d", motor[motorFL]);
+  nxtDisplayString(1, "MotorFR: %d", motor[motorFR]);
+  nxtDisplayString(2, "MotorBL: %d", motor[motorBL]);
+  nxtDisplayString(3, "MotorBR: %d", motor[motorBR]);
+	wait1Msec(100);
 }
 
 task arm()
@@ -71,7 +71,7 @@ task arm()
 task main()
 {
 	InitializeRobot();
-
+	waitForStart();
 	while(true)
 	{
 		getJoystickSettings(joystick);
