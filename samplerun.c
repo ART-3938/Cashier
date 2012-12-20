@@ -39,8 +39,8 @@ task arm()
 {
 	float am = (joystick.joy1_y1 / 128.0) * 20;
 	motor[armMotor] = am;
-	float as = abs((joystick.joy1_y2 / 128.0)) * 255;
-	servo[armServo] = as;
+	float as = (joystick.joy1_y2 / 128.0) * 2;
+	servoChangeRate[armServo] = as;
 }
 
 task main()
