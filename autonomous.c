@@ -22,15 +22,16 @@
 	ART-3938
 	Last edited 12.22.12
 
-	Code for teleop mode -- uses one gamepad for now
+	Code for autonomous motion
+	All "tasks" for motion in teleop mode converted to bools, because, well, asynchronous
+	operation should (?) still work is tasks are calling methods, and we don't want
+	to rotate/strafe the bot forever -- only a certain distance
 */
 
 #include "JoystickDriver.c"
 
-void rotate()
+void rotate(float r)
 {
-	float r = joystick.joy1_x2 / 128.0;
-
 	int speed = 100;
 
 	motor[motorFL] = motor[motorFL] + (speed * r);
@@ -39,10 +40,7 @@ void rotate()
 	motor[motorBL] = motor[motorBL] + (speed * r);
 }
 
-void strafe(){
-	float x = joystick.joy1_x1 / 128.0;
-	float y = joystick.joy1_y1 / 128.0;
-
+void strafe(float x, float y){
 	int speed = 100;
 
 	//Speed coefficient of FL and BR motors
@@ -54,7 +52,6 @@ void strafe(){
 	a = (-x - y)/2.0;
 	b = (x - y)/2.0;
 
-	//divide by 1.3 because the joystick values are above 100.
 	motor[motorFL] = speed * a;
 	motor[motorBR] = speed * a;
 	motor[motorFR] = speed * b;
@@ -64,12 +61,6 @@ void strafe(){
 void InitializeRobot()
 {
 	disableDiagnosticsDisplay();
-}
-
-task drive()
-{
-	//strafe();
-	rotate();
 }
 
 task drawScreen()
@@ -87,8 +78,16 @@ task drawScreen()
 	wait1Msec(100);
 }
 
-task arm()
+bool arm(int servoSetting, int armSetting)
 {
+	//servoSetting is value from -127-128 (I think); armSetting is desired
+	//speed -- we could do more if we put on encoders
+}
+
+task AI()
+{
+	//presumably, here we put the sensor-based stimuli for action to be handled in
+	//asynchronous tasks
 }
 
 task main()
@@ -97,9 +96,7 @@ task main()
 	waitForStart();
 	while(true)
 	{
-		getJoystickSettings(joystick);
-		StartTask(drive);
 		StartTask(drawScreen);
-		StartTask(arm);
+		StartTask(AI);
 	}
 }
