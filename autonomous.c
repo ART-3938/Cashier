@@ -62,10 +62,10 @@ task drawScreen()
 {
 	eraseDisplay();
 	nxtDisplayCenteredTextLine(0, "ART-3938");
-	nxtDisplayString(0, "MotorFL: %d", motor[motorFL]);
-  nxtDisplayString(1, "MotorFR: %d", motor[motorFR]);
-  nxtDisplayString(2, "MotorBL: %d", motor[motorBL]);
-  nxtDisplayString(3, "MotorBR: %d", motor[motorBR]);
+	nxtDisplayString(0, "MotorF: %d", motor[motorF]);
+  nxtDisplayString(1, "motorB: %d", motor[motorB]);
+  nxtDisplayString(2, "MotorL: %d", motor[motorL]);
+  nxtDisplayString(3, "MotorR: %d", motor[motorR]);
   nxtDisplayString(4, "MotorARM: %d", motor[motorARM]);
   nxtDisplayString(5, "ServoOne: %d", servo[armOne]);
   nxtDisplayString(6, "ServoTwo: %d", motor[armTwo]);
@@ -80,9 +80,9 @@ bool isInZone(int zone, int sensor)
 
 void moveUntilAligned(int x, int y, int zone, int sensor){
 	bool aligned = false;
-	strafe(x, y)
+	strafe(x, y);
 	while(!aligned){
-		if(isInZone(zone, sensor){
+		if(isInZone(zone, sensor)){
 			aligned = true;
 			strafe(0, 0);
 		}
@@ -90,7 +90,7 @@ void moveUntilAligned(int x, int y, int zone, int sensor){
 }
 
 bool realignZone1(){
-	if(isInZone(zone1Num, infrared1){
+	if(isInZone(zone1Num, infrared1)){
 		return false;
 	}
 	else{
@@ -103,7 +103,7 @@ bool realignZone1(){
 		}
 		return true;
 	}
-{
+}
 
 void driveDiagonal(){
 	int vectorX = 20;

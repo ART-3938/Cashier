@@ -28,19 +28,21 @@
 
 string debug_val;
 
-void rotate()
-{
+task drive(){
+	short x;
+	short y;
+	short r;
+	while(true){
+		x = (joystick.joy1_x1 / 128.0) * 100;
+		y = (joystick.joy1_y1 / 128.0) * 100;
 
-}
+		r = (joystick.joy1_x2 / 128.0) * 100;
 
-void strafe(){
-	short x = (joystick.joy1_x1 / 128.0) * 100;
-	short y = (joystick.joy1_y1 / 128.0) * 100;
-
-	motor[motorL] = y;
-	motor[motorR] = y;
-	motor[motorF] = x;
-	motor[motorB] = x;
+		motor[motorL] = y + r;
+		motor[motorR] = y - r;
+		motor[motorF] = x + r;
+		motor[motorB] = x - r;
+	}
 }
 
 void InitializeRobot()
@@ -52,14 +54,6 @@ void InitializeRobot()
 	StringConcatenate(debug_val, "_DIAG_DISPLAY_DISABLED");
 	motor[LED] = 100;
 	//servo[servoARM] = 200;
-}
-
-task drive()
-{
-	while(true){
-		strafe();
-		//rotate();
-	}
 }
 
 task drawScreen()
@@ -76,6 +70,19 @@ task drawScreen()
   //nxtDisplayString(5, "ServoARM: %d", ServoValue[servoARM]);
   nxtDisplayCenteredTextLine(7, "ART-3938");
 	wait10Msec(10);
+	}
+}
+
+task led()
+{
+	int value = 0;
+	int change = PI/60;
+
+	while(true)
+	{
+		wait10Msec(10);
+		value += change;
+		motor[LED] = 50 * cos(value);
 	}
 }
 
@@ -142,6 +149,7 @@ task main()
 	StartTask(drive);
 	StartTask(drawScreen);
 	StartTask(arm);
+	StartTask(led);
 	while(true)
 	{
 			getJoystickSettings(joystick);
